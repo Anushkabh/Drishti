@@ -2,7 +2,7 @@ const { Server } = require("socket.io");
 
 const io = new Server(8000, {
   cors: {
-    origin: "https://drishti-rks.vercel.app/", // Allow requests from any origin, adjust as needed for security
+    origin: "https://drishti-nine.vercel.app/", // Allow requests from any origin, adjust as needed for security
     methods: ["GET", "POST"],
   },
 });
