@@ -5,15 +5,18 @@ const SocketContext = createContext(null);
 
 export const useSocket = () => {
   const socket = useContext(SocketContext);
+  if (!socket) {
+    throw new Error("useSocket must be used within a SocketProvider");
+  }
   return socket;
 };
 
-export const SocketProvider = (props) => {
-  const socket = useMemo(() => io("https://drishti-bg3z.vercel.app/"), []);
+export const SocketProvider = ({ children }) => {
+  const socket = useMemo(() => io("https://drishti-bg3z.vercel.app"), []);
 
   return (
     <SocketContext.Provider value={socket}>
-      {props.children}
+      {children}
     </SocketContext.Provider>
   );
 };
