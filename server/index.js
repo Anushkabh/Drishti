@@ -4,6 +4,8 @@ const io = new Server(8000, {
   cors: {
     origin: "https://drishti-nine.vercel.app/", // Allow requests from any origin, adjust as needed for security
     methods: ["GET", "POST"],
+    allowedHeaders: ["my-custom-header"],
+    credentials: true
   },
 });
 
