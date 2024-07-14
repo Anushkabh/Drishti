@@ -1,8 +1,10 @@
 const { Server } = require("socket.io");
+const http = require("http");
 
-const io = new Server(8000, {
+const server = http.createServer();
+const io = new Server(server, {
   cors: {
-    origin: "https://drishti-nine.vercel.app/", // Allow requests from any origin, adjust as needed for security
+    origin: "https://drishti-nine.vercel.app", // Remove trailing slash from origin URL
     methods: ["GET", "POST"],
     allowedHeaders: ["my-custom-header"],
     credentials: true
@@ -14,6 +16,7 @@ const socketidToEmailMap = new Map();
 
 io.on("connection", (socket) => {
   console.log(`Socket Connected`, socket.id);
+  
   socket.on("room:join", (data) => {
     const { email, room } = data;
     emailToSocketIdMap.set(email, socket.id);
@@ -24,7 +27,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("user:call", ({ to, offer }) => {
-    io.to(to).emit("incomming:call", { from: socket.id, offer });
+    io.to(to).emit("incoming:call", { from: socket.id, offer });
   });
 
   socket.on("call:accepted", ({ to, ans }) => {
@@ -41,3 +44,9 @@ io.on("connection", (socket) => {
     io.to(to).emit("peer:nego:final", { from: socket.id, ans });
   });
 });
+
+const PORT = process.env.PORT || 8000; // Use environment port if available
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
